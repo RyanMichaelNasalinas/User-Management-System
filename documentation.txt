@@ -1,0 +1,9 @@
+//Create Table using this query
+
+create table users(
+	id int(11) not null PRIMARY KEY AUTO_INCREMENT,
+    name varchar(256) not null,
+    lastname varchar(256) not null,
+    password varchar(256) not null,
+    email varchar(256) not null
+);

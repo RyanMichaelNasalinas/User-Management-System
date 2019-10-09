@@ -9,6 +9,14 @@ body {
   background-color:transparent;
 }
 
+.library_bg {
+  background-image: url('../../images/library_bg.jpg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+/* Library BG */
+
 #sidebar-wrapper {
   min-height: 100vh;
   margin-left: -15rem;

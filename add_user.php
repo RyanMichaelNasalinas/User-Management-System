@@ -146,8 +146,8 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
                             <label for="user_type">User Type</label>
                             <select name="user_type" id="user_type" class="form-control">
                                 <option value="">Select Value</option>
-                                <option value="user">User</option>
-                                <option value="administrator">Administrator</option>
+                                <option value="user" <?= (isset($_POST['user_type']) == 'user' ? 'selected' : '') ?>>User</option>
+                                <option value="administrator" <?= (isset($_POST['user_type']) == 'user' ? 'administrator' : '') ?>>Administrator</option>
                             </select>
                         </div>
 

@@ -16,4 +16,6 @@
     <link rel="stylesheet" href="./assets/fontawesome/all.css">
     <link rel="stylesheet" href="./assets/css/custom.css">
 </head>
-<body class="bg-dark">
+
+
+<body class="bg-dark <?= check_page(); ?>">

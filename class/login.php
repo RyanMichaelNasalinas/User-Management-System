@@ -3,6 +3,7 @@
 class Login extends Database {
 
     public static $msg;
+    public $success;
 
     public function login_user($username, $password) {
         global $database;
@@ -22,6 +23,7 @@ class Login extends Database {
                 $_SESSION['id'] = $row['id'];
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['user_type'] = $row['user_type'];
+                $_SESSION['success'] = $this->success;
                 return true;
             } else {
                 return false;

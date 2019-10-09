@@ -26,7 +26,6 @@ class Database extends Action {
         return $query;
     }
 
-
     public function escape($string) {
         return $this->connection->escape_string($string);
     }

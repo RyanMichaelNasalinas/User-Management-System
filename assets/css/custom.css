@@ -2,6 +2,13 @@ body {
   overflow-x: hidden;
 }
 
+.del_btn {
+  padding:0;
+  margin: 0;
+  border:0;
+  background-color:transparent;
+}
+
 #sidebar-wrapper {
   min-height: 100vh;
   margin-left: -15rem;

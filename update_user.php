@@ -1,11 +1,9 @@
-<?php include "inc/header.php"; ?>
-
 <?php 
+    include "inc/header.php";
 
-    if(!isset($_GET['edit']) && !isset($_GET['id'])) {
-        header("Location: index.php");
+    if(!$validation->is_admin($_SESSION['user_type'])) {
+        header("location:index.php");
     }
-
 ?>
 
 <div class="d-flex" id="wrapper">
@@ -35,7 +33,7 @@
             $database->gender = $database->escape($_POST['gender']);
             $database->username = $database->escape($_POST['username']);
             $database->email = $database->escape($_POST['email']);
-            $database->user_type = $database->escape('user');
+            $database->user_type = $database->escape('user');   
 
             //Message
             $msg = $validation->check_empty($_POST, ['firstname', 'lastname', 'age', 'gender', 'username', 'email']);
@@ -47,7 +45,11 @@
             }
         }
         ?>
-        <?php if (isset($_GET['edit'])) : ?>
+        <?php
+           
+        
+            if (isset($_GET['id'])): 
+        ?>
             <?php
                 $database->escape($id = $_GET['id']);
 
@@ -104,17 +106,15 @@
 
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?= (isset($row['username']) ? $row['username'] : $_POST['username']); ?>" readonly>
+                                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?= (isset($row['username']) ? $row['username'] : $_POST['username']); ?>" <?= $validation->is_admin($_SESSION['user_type']) ? '': 'readonly';?>>
                                 </div>
 
-                                <div class=" form-group">
+                                <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?= (isset($row['email']) ? $row['email'] : $_POST['email']); ?>">
                                 </div>
 
                             <?php endwhile; ?>
-                <?php else: ?>
-                        <?php header("location:index.php"); ?>
                         <?php endif; ?>
                         <div class="form-group">
                             <input type="submit" value="Update" class="btn btn-success" name="update">

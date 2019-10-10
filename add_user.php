@@ -1,15 +1,15 @@
-<?php 
-    include "inc/header.php"; 
+<?php
+include "inc/header.php";
 
-    if (!$validation->is_admin($_SESSION['user_type'])) {
-        $validation->redirect('index.php');
-    }
+if (!$validation->is_admin($_SESSION['user_type'])) {
+    $validation->redirect('index.php');
+}
 ?>
 
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-        <?php include "inc/sidenav.php"; ?>
+    <?php include "inc/sidenav.php"; ?>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -28,8 +28,10 @@
         </div>
 
         <?php
+
         if (isset($_POST['register'])) {
 
+        
             $database->firstname = $database->escape(Validation::helper_uc($_POST['firstname']));
             $database->lastname = $database->escape(Validation::helper_uc($_POST['lastname']));
             $database->age = $database->escape($_POST['age']);
@@ -47,6 +49,9 @@
                 ['firstname', 'lastname', 'age', 'gender', 'username', 'password', 'confirm_password', 'email', 'user_type']
             );
 
+
+
+
             if ($msg != null) {
                 $msg =  '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
                             <strong>' . $msg . 'should not be empty</strong>
@@ -54,25 +59,35 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
+            } elseif($validation->check_username($_POST['username'])) {
+                    $error_msg = $_SESSION['message']  = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
+                                                <strong> Username is already taken </strong>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>';
             } else {
-                $database->add_user();
-                $msg_succ = $_SESSION['message']  = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
-                            <strong> User has been added successfully </strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
 
-                        unset($_POST['firstname'],
-                        $_POST['lastname'],
-                        $_POST['age'],
-                        $_POST['gender'],
-                        $_POST['username'],
-                        $_POST['password'],
-                        $_POST['confirm_password'],
-                        $_POST['email'],
-                        $_POST['user_type']);
-                    }
+                    $database->add_user();
+                    $msg_succ = $_SESSION['message']  = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
+                                    <strong> User has been added successfully </strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+
+                    unset($_POST['firstname'],
+                    $_POST['lastname'],
+                    $_POST['age'],
+                    $_POST['gender'],
+                    $_POST['username'],
+                    $_POST['password'],
+                    $_POST['confirm_password'],
+                    $_POST['email'],
+                    $_POST['user_type']);
+                
+                }
+    
             }
         ?>
 
@@ -80,6 +95,7 @@
             <div class="text-center">
                 <?= isset($msg_succ) ? $msg_succ : ''; ?>
                 <?= isset($msg) ? $msg : ''; ?>
+                <?= isset($error_msg) ? $error_msg : ''; ?>
             </div>
 
             <h1 class="text-center mt-3">Add New User</h1>

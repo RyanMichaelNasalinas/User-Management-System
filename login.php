@@ -10,12 +10,12 @@ if (isset($_POST['login'])) {
     if ($login) {
         header("location:index.php");
     } elseif (empty($username) && empty($password)) {
-        Login::$msg = 'This Username and Password should not be empty';
+        Login::$msg = 'Username and Password should not be empty';
     } elseif (empty($username)) {
         Login::$msg = 'Username is required';
     } elseif (empty($password)) {
         Login::$msg = "Password is required";
-    } else {
+    }  else {
         Login::$msg = 'Incorrect Credentials';
     }
 }

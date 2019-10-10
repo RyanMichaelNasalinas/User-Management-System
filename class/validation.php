@@ -1,6 +1,6 @@
 <?php 
 
-class Validation {
+class Validation extends Database {
     
     //Validate Fields
     public function check_empty($data,$fields) {
@@ -20,6 +20,41 @@ class Validation {
             return false;
         }
     }
+
+    //Select Duplicate Username
+    public function check_username($username)
+    {
+        $stmt = $this->connection->prepare("SELECT username FROM users WHERE username = ? LIMIT 1");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $num_rows = $result->num_rows;
+
+        if ($num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    //Select Duplicate Email 
+    public function check_email($email) {
+        $stmt = $this->connection->prepare("SELECT email FROM users WHERE email = ? LIMIT 1");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $num_rows = $result->num_rows;
+        
+        if ($num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     
     public function redirect($location) {
         return header("Location:$location");

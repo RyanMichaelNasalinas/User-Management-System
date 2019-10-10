@@ -1,8 +1,7 @@
 <?php 
 
 class Validation {
-
-
+    
     //Validate Fields
     public function check_empty($data,$fields) {
         $msg = null;

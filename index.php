@@ -3,11 +3,13 @@ include "inc/header.php";
 
 $login->is_loggedin($_SESSION['id'], 'login.php');
 
+
 if(isset($_POST['delete'])) {
     $id = $_POST['delete_id'];
     $database->delete_user($id);
     header("location:index.php");
 }
+
 ?>
 
 <div class="d-flex" id="wrapper">
@@ -50,7 +52,7 @@ if(isset($_POST['delete'])) {
                                     <th>Email</th>
                                     <th>User Type</th>
                                     <th>User Status</th>
-                                    <th colspan="2">Action</th>
+                                    <th colspan="3">Action</th>
                                 </thead>
                                 <tbody>
                                     <?php
@@ -58,7 +60,7 @@ if(isset($_POST['delete'])) {
                                         $result = $database->display_user();
 
                                         foreach ($result as $res) :
-                                            ?>
+                                        ?>
                                         <tr>
                                             <td><?= $res['id']; ?></td>
                                             <td><?= $res['firstname']; ?></td>

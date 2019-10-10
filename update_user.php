@@ -1,9 +1,9 @@
-<?php 
-    include "inc/header.php";
+<?php
+include "inc/header.php";
 
-    if(!$validation->is_admin($_SESSION['user_type'])) {
-        header("location:index.php");
-    }
+if (!$validation->is_admin($_SESSION['user_type'])) {
+    header("location:index.php");
+}
 ?>
 
 <div class="d-flex" id="wrapper">
@@ -33,31 +33,46 @@
             $database->gender = $database->escape($_POST['gender']);
             $database->username = $database->escape($_POST['username']);
             $database->email = $database->escape($_POST['email']);
-            $database->user_type = $database->escape('user');   
+            $database->user_type = $database->escape($_POST['user_type']);
+            $database->user_status = $database->escape($_POST['user_status']);
 
             //Message
-            $msg = $validation->check_empty($_POST, ['firstname', 'lastname', 'age', 'gender', 'username', 'email']);
+            $msg = $validation->check_empty($_POST, ['firstname', 'lastname', 'age', 'gender', 'username', 'email', 'user_type','user_status']);
             if ($msg != null) {
-                echo "<div class='alert alert-danger text-left w-25 mt-5 mx-auto'>" . $msg . "</div>";
+                $msg =  '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
+                                        <strong>' . $msg . 'should not be empty</strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
             } else {
                 $database->update_user($_GET['id']);
-                header('location: update_user.php?edit&id=' . $_GET['id']);
+                $msg_succ = $_SESSION['message']  = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
+                                        <strong> User has been Updated successfully </strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
             }
         }
         ?>
         <?php
-           
-        
-            if (isset($_GET['id'])): 
-        ?>
+
+
+        if (isset($_GET['id'])) :
+            ?>
             <?php
                 $database->escape($id = $_GET['id']);
 
                 $result = $database->query($database->display_userby_id($id));
                 while ($row = $result->fetch_assoc()) :
-
-            ?>
+                    ?>
                 <div class="container">
+                    <div class="text-center">
+                        <?= isset($msg_succ) ? $msg_succ : ''; ?>
+                        <?= isset($msg) ? $msg : ''; ?>
+                    </div>
+
                     <h1 class="text-center mt-3">Update User</h1>
                     <div class="row">
                         <div class="col-lg-8 mx-auto">
@@ -106,12 +121,32 @@
 
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?= (isset($row['username']) ? $row['username'] : $_POST['username']); ?>" <?= $validation->is_admin($_SESSION['user_type']) ? '': 'readonly';?>>
+                                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?= (isset($row['username']) ? $row['username'] : $_POST['username']); ?>" <?= $validation->is_admin($_SESSION['user_type']) ? '' : 'readonly'; ?>>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?= (isset($row['email']) ? $row['email'] : $_POST['email']); ?>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user_type">User Type</label>
+                                    <select name="user_type" id="user_type" class="form-control">
+                                        <option value="">Select Value</option>
+                                        <option value="user" <?= $row['user_type'] == 'user'  ? 'selected' : ''; ?>>User</option>
+                                        <option value="administrator" <?= $row['user_type'] == 'administrator'  ? 'selected' : ''; ?>>Administrator</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="user_status">User Status</label>
+                                    <select name="user_status" class='form-control'>
+                                        <option value="">Select Value</option>
+                                        <option value="approved" <?= $row['user_status'] == 'approved'  ? 'selected' : ''; ?>>Approved</option>
+                                        <option value="pending" <?= $row['user_status'] == 'pending'  ? 'selected' : ''; ?>>Pending</option>
+                                        <option value="rejected" <?= $row['user_status'] == 'rejeceted'  ? 'selected' : ''; ?>>Rejected</option>
+                                    </select>
                                 </div>
 
                             <?php endwhile; ?>
@@ -124,8 +159,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
     </div>
+</div>
 <!-- /#page-content-wrapper -->
 <!-- /#wrapper -->
 <?php include "inc/footer.php"; ?>

@@ -26,9 +26,4 @@
     }
  }
 
- function check_page() {
-    if(basename($_SERVER['PHP_SELF'],".php") == 'login') {
-        echo "library_bg";
-    }
- }
 ?>

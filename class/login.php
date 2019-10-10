@@ -41,6 +41,14 @@ class Login extends Database {
             return header("location:".$location);
         }
     }
+
+    public function message($msg = "") {
+        if(!empty($msg)) {
+            $_SESSION['message'] = $msg;
+        } else {
+            return $this->message;
+        }
+    }
 }
 
 

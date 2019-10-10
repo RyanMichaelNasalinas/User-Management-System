@@ -1,24 +1,22 @@
-<?php include "inc/header.php"; ?>
+<?php 
+    include "inc/header.php"; 
 
-<?php
-if (!$validation->is_admin($_SESSION['user_type'])) {
-    $validation->redirect('index.php');
-}
+    if (!$validation->is_admin($_SESSION['user_type'])) {
+        $validation->redirect('index.php');
+    }
 ?>
 
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-    <?php include "inc/sidenav.php"; ?>
+        <?php include "inc/sidenav.php"; ?>
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-
         <!-- Navbar -->
         <?php include "inc/navbar.php"; ?>
         <!-- /Navbar -->
-
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-sm-6">
@@ -43,21 +41,11 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
             $database->user_status = $database->escape('pending');
 
 
+
             $msg = $validation->check_empty(
                 $_POST,
-                [
-                    'firstname',
-                    'lastname',
-                    'age',
-                    'gender',
-                    'username',
-                    'password',
-                    'confirm_password',
-                    'email',
-                    'user_type'
-                ]
+                ['firstname', 'lastname', 'age', 'gender', 'username', 'password', 'confirm_password', 'email', 'user_type']
             );
-
 
             if ($msg != null) {
                 $msg =  '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
@@ -68,13 +56,32 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
                         </div>';
             } else {
                 $database->add_user();
-                header('location: add_user.php');
+                $msg_succ = $_SESSION['message']  = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
+                            <strong> User has been added successfully </strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>';
+
+                        unset($_POST['firstname'],
+                        $_POST['lastname'],
+                        $_POST['age'],
+                        $_POST['gender'],
+                        $_POST['username'],
+                        $_POST['password'],
+                        $_POST['confirm_password'],
+                        $_POST['email'],
+                        $_POST['user_type']);
+                    }
             }
-        }
         ?>
 
         <div class="container">
-            <?= isset($msg) ? $msg : ''; ?>
+            <div class="text-center">
+                <?= isset($msg_succ) ? $msg_succ : ''; ?>
+                <?= isset($msg) ? $msg : ''; ?>
+            </div>
+
             <h1 class="text-center mt-3">Add New User</h1>
             <div class="row">
                 <div class="col-lg-8 mx-auto">
@@ -146,8 +153,13 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
                             <label for="user_type">User Type</label>
                             <select name="user_type" id="user_type" class="form-control">
                                 <option value="">Select Value</option>
-                                <option value="user" <?= (isset($_POST['user_type']) == 'user' ? 'selected' : '') ?>>User</option>
-                                <option value="administrator" <?= (isset($_POST['user_type']) == 'user' ? 'administrator' : '') ?>>Administrator</option>
+                                <?php if (isset($_POST['user_type']) == 'user' || isset($_POST['user_type']) == 'administrator') : ?>
+                                    <option value="user" <?= $_POST['user_type'] == 'user' ? 'selected' : '' ?>>User</option>
+                                    <option value="administrator" <?= $_POST['user_type'] == 'administrator' ? 'selected' : '' ?>>Administrator</option>
+                                <?php else : ?>
+                                    <option value="user">User</option>
+                                    <option value="administrator">Administrator</option>
+                                <?php endif; ?>
                             </select>
                         </div>
 

@@ -18,4 +18,4 @@
 </head>
 
 
-<body class="bg-dark <?= check_page(); ?>">
+<body class="bg-dark">

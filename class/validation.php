@@ -47,9 +47,17 @@ class Validation extends Database {
 
         $result = $stmt->get_result();
         $num_rows = $result->num_rows;
-        
+
         if ($num_rows > 0) {
             return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function compare_password($password, $confirm_password) {
+        if($password != $confirm_password) {
+            return true; 
         } else {
             return false;
         }

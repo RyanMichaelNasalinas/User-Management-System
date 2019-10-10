@@ -74,6 +74,13 @@ $errors = [];
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>';
+            } elseif($validation->compare_password($_POST['password'],$_POST['confirm_password'])) {
+                    $errors[] = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
+                                                            <strong> Password is not matched </strong>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>';
             } else {
 
                     $database->add_user();

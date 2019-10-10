@@ -28,9 +28,10 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
         </div>
 
         <?php
-
+$errors = [];
         if (isset($_POST['register'])) {
-
+   
+            
         
             $database->firstname = $database->escape(Validation::helper_uc($_POST['firstname']));
             $database->lastname = $database->escape(Validation::helper_uc($_POST['lastname']));
@@ -53,15 +54,22 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
 
 
             if ($msg != null) {
-                $msg =  '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
+            $errors[] =  '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
                             <strong>' . $msg . 'should not be empty</strong>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>';
             } elseif($validation->check_username($_POST['username'])) {
-                    $error_msg = $_SESSION['message']  = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
+                    $errors[]  = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
                                                 <strong> Username is already taken </strong>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>';
+            } elseif($validation->check_email($_POST['email'])) {
+                $errors[] = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
+                                                <strong> Email is already taken </strong>
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -69,7 +77,7 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
             } else {
 
                     $database->add_user();
-                    $msg_succ = $_SESSION['message']  = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
+                        $errors[]    = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
                                     <strong> User has been added successfully </strong>
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
                                         <span aria-hidden="true">&times;</span>
@@ -93,9 +101,9 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
 
         <div class="container">
             <div class="text-center">
-                <?= isset($msg_succ) ? $msg_succ : ''; ?>
-                <?= isset($msg) ? $msg : ''; ?>
-                <?= isset($error_msg) ? $error_msg : ''; ?>
+                <?php foreach($errors as $error):?>
+                    <?php echo $error; ?>
+                <?php endforeach; ?>
             </div>
 
             <h1 class="text-center mt-3">Add New User</h1>

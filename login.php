@@ -15,8 +15,8 @@ if (isset($_POST['login'])) {
         Login::$msg = 'Username is required';
     } elseif (empty($password)) {
         Login::$msg = "Password is required";
-    }  else {
-        Login::$msg = 'Incorrect Credentials';
+    } else {
+        Login::$msg = 'Incorrect Username or Password';
     }
 }
 ?>
@@ -38,8 +38,13 @@ if (isset($_POST['login'])) {
                                 <label for="password">Password</label>
                                 <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                             </div>
-                            <div class="form-group">
-                                <input type="submit" value="Login" class="btn btn-success" name="login" id="login">
+                            <div class="form-group text-center">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input type="submit" value="Login" class="btn btn-success" name="login" id="login">
+                                        <input type="reset" value="Reset" class="btn btn-danger" name="login" id="login">
+                                    </div>
+                                </div>
                             </div>
                         </form>
                         <?php if (isset($_POST['login'])) : ?>
@@ -58,6 +63,4 @@ if (isset($_POST['login'])) {
 </div>
 
 
-<?php
-include "inc/footer.php";
-?>
+<?php include "inc/footer.php"; ?>

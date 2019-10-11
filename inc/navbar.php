@@ -1,4 +1,4 @@
- <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+ <div class="navbar navbar-expand-lg navbar-light bg-primary">
      <button class="btn btn-light" id="menu-toggle"><i class="fas fa-bars"></i></button>
 
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,20 +10,17 @@
              <li class="nav-item">
                  <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
              </li>
-             <li class="nav-item">
-                 <a class="nav-link" href="#">Link</a>
-             </li>
              <li class="nav-item dropdown">
                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <?= $_SESSION['username']; ?>
+                     <?= $_SESSION['username']; ?>
                  </a>
                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                     <!-- <a class="dropdown-item" href="#">Action</a>
-                     <a class="dropdown-item" href="#">Another action</a>
-                     <div class="dropdown-divider"></div> -->
-                     <a class="dropdown-item" href="./logout.php">Logout</a>
+                     <a class="dropdown-item" href="#"><i class="fas fa-user-alt"></i>&nbsp;My Profile</a>
+                     <a class="dropdown-item" href="#"><i class="fas fa-cog"></i>&nbsp;Settings</a>
+                     <div class="dropdown-divider"></div>
+                     <a class="dropdown-item" href="./logout.php"><i class="fas fa-sign-out-alt"></i>&nbsp;Logout</a>
                  </div>
              </li>
          </ul>
      </div>
- </nav>
+ </div>

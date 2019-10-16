@@ -10,6 +10,6 @@ $database = new Database;
 $action = new Action;
 $validation = new Validation;
 $login = new Login;
-$user = new User;
+
 
 ?>

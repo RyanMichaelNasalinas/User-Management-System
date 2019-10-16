@@ -38,7 +38,7 @@
         //Add new user
         public function add_user() {
             $stmt = $this->connection->prepare("INSERT into users (`firstname`,`lastname`,`age`,`gender`,`username`,`password`,`email`,`user_type`,`user_status`) 
-            VALUES (?,?,?,?,?,?,?,?,?);");
+            VALUES (?,?,?,?,?,?,?,?,?)");
             
             $stmt->bind_param("ssissssss", $this->firstname,$this->lastname,$this->age,$this->gender,$this->username,$this->password,$this->email,$this->user_type,$this->user_status);
             $stmt->execute(); 

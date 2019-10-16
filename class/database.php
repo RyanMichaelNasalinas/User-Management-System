@@ -1,6 +1,6 @@
 <?php
 
-include "action.php";
+
 include "./config/config.php";
 
 class Database extends Action {

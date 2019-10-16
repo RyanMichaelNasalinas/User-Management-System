@@ -28,90 +28,13 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
         </div>
 
         <?php
-$errors = [];
-        if (isset($_POST['register'])) {
-   
-            
-        
-            $database->firstname = $database->escape(Validation::helper_uc($_POST['firstname']));
-            $database->lastname = $database->escape(Validation::helper_uc($_POST['lastname']));
-            $database->age = $database->escape($_POST['age']);
-            $database->gender = $database->escape($_POST['gender']);
-            $database->username = $database->escape($_POST['username']);
-            $database->password = $database->escape(password_hash($_POST['password'], PASSWORD_DEFAULT));
-            $database->email = $database->escape($_POST['email']);
-            $database->user_type = $database->escape($_POST['user_type']);
-            $database->user_status = $database->escape('pending');
+      
+        //Form Validation
+        include "inc/registration_validation.php";
 
-
-
-            $msg = $validation->check_empty(
-                $_POST,
-                ['firstname', 'lastname', 'age', 'gender', 'username', 'password', 'confirm_password', 'email', 'user_type']
-            );
-
-
-
-
-            if ($msg != null) {
-            $errors[] =  '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
-                            <strong>' . $msg . 'should not be empty</strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>';
-            } elseif($validation->check_username($_POST['username'])) {
-                    $errors[]  = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
-                                                <strong> Username is already taken </strong>
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>';
-            } elseif($validation->check_email($_POST['email'])) {
-                $errors[] = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
-                                                <strong> Email is already taken </strong>
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>';
-            } elseif($validation->compare_password($_POST['password'],$_POST['confirm_password'])) {
-                    $errors[] = '<div class="alert alert-danger alert-dismissable fade show text-center" role="alert">
-                                                            <strong> Password is not matched </strong>
-                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>';
-            } else {
-
-                    $database->add_user();
-                        $errors[]    = '<div class="alert alert-success alert-dismissable fade show text-center" role="alert">
-                                    <strong> User has been added successfully </strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="hidden">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>';
-
-                    unset($_POST['firstname'],
-                    $_POST['lastname'],
-                    $_POST['age'],
-                    $_POST['gender'],
-                    $_POST['username'],
-                    $_POST['password'],
-                    $_POST['confirm_password'],
-                    $_POST['email'],
-                    $_POST['user_type']);
-                
-                }
-    
-            }
         ?>
 
         <div class="container">
-            <div class="text-center">
-                <?php foreach($errors as $error):?>
-                    <?php echo $error; ?>
-                <?php endforeach; ?>
-            </div>
 
             <h1 class="text-center mt-3">Add New User</h1>
             <div class="row">
@@ -120,17 +43,19 @@ $errors = [];
 
                         <div class="form-group">
                             <label for="firstname">Firstname</label>
-                            <input type="text" name="firstname" id="firstname" class="form-control" placeholder="Firstname" value="<?= (isset($_POST['firstname']) ? Validation::helper_he($_POST['firstname']) : '') ?>">
+                            <input type="text" name="firstname" id="firstname" class="form-control <?= !empty($data['firstname_err']) ? 'is-invalid' : '' ?>" placeholder="Firstname" value="<?= (isset($_POST['firstname']) ? Validation::helper_he($_POST['firstname']) : '') ?>">
+                            <div class="invalid-feedback text-center"><?=  !empty($data['firstname_err']) ? $data['firstname_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">
                             <label for="lastname">Lastname</label>
-                            <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Lastname" value="<?= (isset($_POST['lastname']) ? Validation::helper_he($_POST['lastname']) : '') ?>">
+                            <input type="text" name="lastname" id="lastname" class="form-control <?= !empty($data['lastname_err']) ? 'is-invalid' : '' ?>" placeholder="Lastname" value="<?= (isset($_POST['lastname']) ? Validation::helper_he($_POST['lastname']) : '') ?>">
+                            <div class="invalid-feedback text-center"><?=  !empty($data['lastname_err']) ? $data['lastname_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">
                             <label for="age">Age</label>
-                            <select name="age" id="age" class="form-control" value="<?= (isset($_POST['age']) ? Validation::helper_he($_POST['age']) : '') ?>">
+                            <select name="age" id="age" class="form-control <?= !empty($data['age_err']) ? 'is-invalid' : '' ?>" value="<?= (isset($_POST['age']) ? Validation::helper_he($_POST['age']) : '') ?>">
                                 <option value="">Select Age</option>
                                 <?php for ($i = 18; $i <= 100; $i++) : ?>
                                     <?php if ($_POST['age'] == $i) : ?>
@@ -140,6 +65,7 @@ $errors = [];
                                     <?php endif; ?>
                                 <?php endfor; ?>
                             </select>
+                            <div class="invalid-feedback text-center"><?=  !empty($data['age_err']) ? $data['age_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">
@@ -158,31 +84,36 @@ $errors = [];
                                     <label class="custom-control-label" for="customRadio3">Female</label>
                                 </div>
                             </div>
+                            <div class="invalid-feedback text-center"><?=  !empty($data['gender_err']) ? $data['gender_err'] : '' ; ?></div>
                         </div>
 
 
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?= (isset($_POST['username']) ? Validation::helper_he($_POST['username']) : ''); ?>">
+                            <input type="text" class="form-control <?= !empty($data['username_err']) ? 'is-invalid' : '' ?>" name="username" id="username" placeholder="Username" value="<?= (isset($_POST['username']) ? Validation::helper_he($_POST['username']) : ''); ?>">
+                            <div class="invalid-feedback text-center"><?=  !empty($data['username_err']) ? $data['username_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="<?= (isset($_POST['password']) ? Validation::helper_he($_POST['password']) : ''); ?>">
+                            <input type="password" class="form-control <?= !empty($data['password_err']) ? 'is-invalid' : '' ?>" name="password" id="password" placeholder="Password" value="<?= (isset($_POST['password']) ? Validation::helper_he($_POST['password']) : ''); ?>">
+                            <div class="invalid-feedback text-center"><?=  !empty($data['password_err']) ? $data['password_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">
                             <label for="confirm_password">Confirm Password</label>
-                            <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" value="<?= (isset($_POST['confirm_password']) ? Validation::helper_he($_POST['confirm_password']) : ''); ?>">
+                            <input type="password" class="form-control <?= !empty($data['confirm_password_err']) ? 'is-invalid' : '' ?>" name="confirm_password" id="confirm_password" placeholder="Confirm Password" value="<?= (isset($_POST['confirm_password']) ? Validation::helper_he($_POST['confirm_password']) : ''); ?>">
+                             <div class="invalid-feedback text-center"><?=  !empty($data['confirm_password_err']) ? $data['confirm_password_err'] : '' ; ?></div>
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<?= (isset($_POST['email']) ? Validation::helper_he($_POST['email']) : ''); ?>">
+                            <input type="email" class="form-control <?= !empty($data['email_err']) ? 'is-invalid' : '' ?>" name="email" id="email" placeholder="Email" value="<?= (isset($_POST['email']) ? Validation::helper_he($_POST['email']) : ''); ?>">
+                            <div class="invalid-feedback text-center"><?=  !empty($data['email_err']) ? $data['email_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">
                             <label for="user_type">User Type</label>
-                            <select name="user_type" id="user_type" class="form-control">
+                            <select name="user_type" id="user_type" class="form-control <?= !empty($data['user_type_err']) ? 'is-invalid' : '' ?>">
                                 <option value="">Select Value</option>
                                 <?php if (isset($_POST['user_type']) == 'user' || isset($_POST['user_type']) == 'administrator') : ?>
                                     <option value="user" <?= $_POST['user_type'] == 'user' ? 'selected' : '' ?>>User</option>
@@ -192,6 +123,7 @@ $errors = [];
                                     <option value="administrator">Administrator</option>
                                 <?php endif; ?>
                             </select>
+                            <div class="invalid-feedback text-center"><?=  !empty($data['user_type_err']) ? $data['user_type_err'] : '' ; ?></div>
                         </div>
 
                         <div class="form-group">

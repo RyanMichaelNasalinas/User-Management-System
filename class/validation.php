@@ -38,7 +38,6 @@ class Validation extends Database {
         }
     }
 
-
     //Select Duplicate Email 
     public function check_email($email) {
         $stmt = $this->connection->prepare("SELECT email FROM users WHERE email = ? LIMIT 1");
@@ -76,6 +75,7 @@ class Validation extends Database {
     public static function helper_he($field) {
         return htmlentities($field);
     }
+
 
 }
 

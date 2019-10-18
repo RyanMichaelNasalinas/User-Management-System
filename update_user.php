@@ -62,10 +62,12 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
         if (isset($_GET['id'])) :
             ?>
             <?php
-                $database->escape($id = $_GET['id']);
+                $id = $database->escape($id = $_GET['id']);
 
-                $result = $database->query($database->display_userby_id($id));
-                while ($row = $result->fetch_assoc()) :
+                // $result = $database->query($database->display_userby_id($id));
+                 $result = $database->display_userby_id($id);
+
+               foreach($result as $row):
                     ?>
                 <div class="container">
                     <div class="text-center">
@@ -149,7 +151,7 @@ if (!$validation->is_admin($_SESSION['user_type'])) {
                                     </select>
                                 </div>
 
-                            <?php endwhile; ?>
+                        <?php endforeach; ?>
                         <?php endif; ?>
                         <div class="form-group">
                             <input type="submit" value="Update" class="btn btn-success" name="update">

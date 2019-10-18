@@ -29,11 +29,32 @@
             return $rows;
         }
 
-        //Select user by id
-        public function display_userby_id($id) {
-            $query = "SELECT * FROM users WHERE id = $id";
-            return $query;
+
+            public function display_userby_id($id) {
+                $stmt = $this->connection->prepare("SELECT * FROM users WHERE id = ?");
+                $stmt->bind_param("i",$id);
+                $stmt->execute();
+                
+                $result = $stmt->get_result();
+
+                if($result == false) {
+                    return false;
+                }
+
+                $rows = [];
+
+                while($row = $result->fetch_assoc()) {
+                    $rows[] = $row;
+                }
+                return $rows;
         }
+
+
+        //Select user by id
+        // public function display_userby_id($id) {
+        //     $query = "SELECT * FROM users WHERE id = $id";
+        //     return $query;
+        // }
 
         //Add new user
         public function add_user() {
